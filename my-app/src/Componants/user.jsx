@@ -1,8 +1,18 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+
 
 function UserPage() {
+
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+
   return (
     <html lang="en">
       <head>
@@ -16,7 +26,7 @@ function UserPage() {
         />
       </head>
       <body>
-        <Header />
+        <Header isAuthenticated={isAuthenticated}/>
         <main className="main bg-dark">
           <div className="header">
             <h1>Welcome back<br />Tony Jarvis!</h1>

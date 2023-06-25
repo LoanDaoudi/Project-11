@@ -39,5 +39,24 @@
       To begin the development, run `npm start` or `yarn start`.
       To create a production bundle, use `npm run build` or `yarn build`.
     -->
+    <script>var myHeaders = new Headers();
+      myHeaders.append("accept", "application/json");
+      myHeaders.append("Content-Type", "application/json");
+      
+      var body = JSON.stringify({
+        "email": "steve@rogers.com",
+        "password": "password446"
+      });
+      
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body
+      };
+      
+      fetch("http://localhost:3001/api/v1/user/login", requestOptions)
+        .then(response => response.json())
+        .then(result => console.log(result))
+        .catch(error => console.log('error', error));</script>
   </body>
 </html>

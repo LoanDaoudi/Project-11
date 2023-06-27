@@ -276,6 +276,46 @@ body {
   color: #fff;
 }
 
+.modal { 
+  width: 500px;
+  height: 280px;
+
+  border-radius: 25px;
+  background-color: #310357;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.modal-content{
+  display: flex;
+  flex-direction: column;
+}
+
+#modalform{
+  display: flex;
+  flex-direction: column;
+  
+}
+
+#modalform input{
+  width: 55%;
+  height: 35px;
+  margin: auto;
+  border-radius: 10px;
+}
+
+#modalform button{
+  width: 35%;
+  margin: auto;
+}
+
+
+
+
+
+
 @media (min-width: 720px) {
   .account {
     flex-direction: row;

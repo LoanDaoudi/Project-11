@@ -1,14 +1,51 @@
-import React from 'react';
-import Header from './Header';
-import Footer from './Footer';
-import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 
-
-function UserPage() {
-
-  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-
+  import React, { useState } from 'react';
+  import Header from './Header';
+  import Footer from './Footer';
+  import { Navigate } from 'react-router-dom';
+  import { useSelector } from 'react-redux';
+  
+  function UserPage() {
+    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+    const [isModalOpen, setModalOpen] = useState(false);
+    const [newUserName, setNewUserName] = useState('');
+  
+    const openModal = () => {
+      setModalOpen(true);
+    };
+  
+    const closeModal = () => {
+      setModalOpen(false);
+    };
+  
+    const handleUserNameChange = (event) => {
+      setNewUserName(event.target.value);
+    };
+  
+    const updateUserName = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            // Ajoutez les headers nécessaires, tels que le token d'authentification
+          },
+          body: JSON.stringify({ userName: newUserName }), // newUserName est la nouvelle valeur du nom d'utilisateur
+        });
+  
+        if (response.ok) {
+          // La mise à jour a réussi, vous pouvez effectuer les actions nécessaires (par exemple, fermer la modale)
+          closeModal();
+        } else {
+          // La mise à jour a échoué, vous pouvez gérer l'erreur ici
+          console.error('Failed to update user name');
+        }
+      } catch (error) {
+        // Une erreur s'est produite lors de la requête, vous pouvez la gérer ici
+        console.error('Error updating user name', error);
+      }
+    };
+  
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
@@ -24,14 +61,39 @@ function UserPage() {
           rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
         />
+        
       </head>
       <body>
-        <Header isAuthenticated={isAuthenticated}/>
+      {isModalOpen && (
+          <div className="modal">
+            <div className="modal-content">
+              <h2>Change User Name</h2>
+              <form id='modalform'>
+                <label htmlFor="newUserName">New User Name:</label>
+                <input
+                  type="text"
+                  id="newUserName"
+                  value={newUserName}
+                  onChange={handleUserNameChange}
+                />
+                <button className="edit-button" type="button" onClick={updateUserName}>
+                  Save
+                </button>
+                <button className="edit-button" type="button" onClick={closeModal}>
+                  Cancel
+                </button>
+              </form>
+            </div>
+          </div>
+        )}
+      <Header isAuthenticated={isAuthenticated} isUserPage={true} />
         <main className="main bg-dark">
           <div className="header">
             <h1>Welcome back<br />Tony Jarvis!</h1>
-            <button className="edit-button">Edit Name</button>
-          </div>
+            <button className="edit-button" onClick={openModal}>
+              Edit Name
+            </button>         
+             </div>
           <h2 className="sr-only">Accounts</h2>
           <section className="account">
             <div className="account-content-wrapper">

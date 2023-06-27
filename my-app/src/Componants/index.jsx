@@ -1,12 +1,14 @@
 import React from 'react';
 import Header from './Header';
 import Footer from './Footer';
+import { useSelector } from 'react-redux';
 import iconchat from './img/icon-chat.png';
 import iconmoney from './img/icon-money.png';
 import iconsecurity from './img/icon-security.png';
 
 
 function HomePage() {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);  
   return (
     <html lang="en">
       <head>
@@ -20,7 +22,7 @@ function HomePage() {
         />
       </head>
       <body>
-        <Header/>
+      <Header isAuthenticated={isAuthenticated} isUserPage={false} />
         <main>
           <div className="hero">
             <section className="hero-content">

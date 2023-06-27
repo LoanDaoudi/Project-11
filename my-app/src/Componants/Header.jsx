@@ -3,23 +3,17 @@ import argentBankLogo from './img/argentBankLogo.png';
 import { useDispatch } from 'react-redux';
 import { signOut } from '../authAction';
 
-
-
-function Header({ isAuthenticated }) {
-
+function Header({ isAuthenticated, isUserPage }) {
   const dispatch = useDispatch();
 
   const handleSignOut = () => {
     dispatch(signOut());
   };
+
   return (
     <nav className="main-nav">
-      <a className="main-nav-logo" href="./">
-        <img
-          className="main-nav-logo-image"
-          src={argentBankLogo}
-          alt="Argent Bank Logo"
-        />
+      <a className="main-nav-logo" href={isUserPage ? './' : './login'}>
+        <img className="main-nav-logo-image" src={argentBankLogo} alt="Argent Bank Logo" />
         <h1 className="sr-only">Argent Bank</h1>
       </a>
       <div>

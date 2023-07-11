@@ -1,54 +1,58 @@
+import React, { useState } from 'react';
+import Header from './Header';
+import Footer from './Footer';
+import { Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
-  import React, { useState } from 'react';
-  import Header from './Header';
-  import Footer from './Footer';
-  import { Navigate } from 'react-router-dom';
-  import { useSelector } from 'react-redux';
-  
-  function UserPage() {
-    const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
-    const [isModalOpen, setModalOpen] = useState(false);
-    const [newUserName, setNewUserName] = useState('');
-  
-    const openModal = () => {
-      setModalOpen(true);
-    };
-  
-    const closeModal = () => {
-      setModalOpen(false);
-    };
-  
-    const handleUserNameChange = (event) => {
-      setNewUserName(event.target.value);
-    };
-  
-    const updateUserName = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/v1/user/profile', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            // Ajoutez les headers nécessaires, tels que le token d'authentification
-          },
-          body: JSON.stringify({ userName: newUserName }), // newUserName est la nouvelle valeur du nom d'utilisateur
-        });
-  
-        if (response.ok) {
-          // La mise à jour a réussi, vous pouvez effectuer les actions nécessaires (par exemple, fermer la modale)
-          closeModal();
-        } else {
-          // La mise à jour a échoué, vous pouvez gérer l'erreur ici
-          console.error('Failed to update user name');
-        }
-      } catch (error) {
-        // Une erreur s'est produite lors de la requête, vous pouvez la gérer ici
-        console.error('Error updating user name', error);
+function UserPage() {
+  const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [newUserName, setNewUserName] = useState('');
+  const [userName, setUserName] = useState('Tony Jarvis'); // Default username, you can replace it with the actual username from your state or props
+
+  const openModal = () => {
+    setModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setModalOpen(false);
+  };
+
+
+
+  const handleUserNameChange = (event) => {
+    setNewUserName(event.target.value);
+  };
+
+  const updateUserName = async () => {
+    try {
+      let token = localStorage.getItem('token');
+
+      const response = await fetch('http://localhost:3001/api/v1/user/profile', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({ userName: newUserName }),
+      });
+
+      if (response.ok) {
+        // The update was successful, you can perform necessary actions (e.g., close the modal)
+        setUserName(newUserName); // Update the username with the new value
+        closeModal();
+      } else {
+        console.error('Failed to update user name');
       }
-    };
-  
+    } catch (error) {
+      console.error('Error updating user name', error);
+    }
+  };
+
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
+
 
   return (
     <html lang="en">
@@ -89,11 +93,11 @@
       <Header isAuthenticated={isAuthenticated} isUserPage={true} />
         <main className="main bg-dark">
           <div className="header">
-            <h1>Welcome back<br />Tony Jarvis!</h1>
+            <h1>Welcome back<br />{userName}</h1>
             <button className="edit-button" onClick={openModal}>
               Edit Name
-            </button>         
-             </div>
+            </button>
+          </div>
           <h2 className="sr-only">Accounts</h2>
           <section className="account">
             <div className="account-content-wrapper">

@@ -10,3 +10,11 @@ export const signIn = (token) => {
       type: 'SIGN_OUT'
     };
   };
+
+  
+export const yourReduxAction = (userData) => {
+  return {
+    type: 'SIGN-UP',
+    payload: userData
+  };
+};

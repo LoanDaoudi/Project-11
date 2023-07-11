@@ -281,22 +281,33 @@ body {
   height: 280px;
 
   border-radius: 25px;
-  background-color: #310357;
+  background-color: #12002b;
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  box-shadow: 0 2px 6px rgba(255, 255, 255, 1);
+
+}
+
+.modal h2{
+  color: #fff ;
 }
 
 .modal-content{
   display: flex;
   flex-direction: column;
+  
 }
 
 #modalform{
   display: flex;
   flex-direction: column;
-  
+}
+
+#modalform label{
+  color: #fff;
+  margin-bottom: 5px;
 }
 
 #modalform input{
@@ -304,11 +315,13 @@ body {
   height: 35px;
   margin: auto;
   border-radius: 10px;
+  margin-bottom: 15px;
 }
 
 #modalform button{
   width: 35%;
   margin: auto;
+  margin-bottom: 4px;
 }
 
 

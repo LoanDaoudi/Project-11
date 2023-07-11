@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from './Header';
 import Footer from './Footer';
 import axios from 'axios';
 import { useSelector, useDispatch } from 'react-redux';
 import { signIn } from '../authAction';
+import { yourReduxAction } from '../authAction';
 
 function SignInPage() {
   const [username, setUsername] = useState('');
@@ -13,6 +14,20 @@ function SignInPage() {
   const navigate = useNavigate();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const dispatch = useDispatch();
+
+  const [userData, setUserData] = useState({
+    email: '',
+    password: '',
+    firstName: '',
+    lastName: '',
+    userName: ''
+  });
+
+  useEffect(() => {
+    dispatch(yourReduxAction(userData));
+  }, [userData, dispatch]);
+  
+  
 
   const handleSignIn = (e) => {
     e.preventDefault();
@@ -24,23 +39,44 @@ function SignInPage() {
       })
       .then(response => {
         if (response.status === 200) {
-          const token = response.data.token;
-
+          const token = response.data.body.token;
+          console.log(response);
           setUsername('');
           setPassword('');
           setError('');
 
+          localStorage.setItem('token', token);
+
           dispatch(signIn(token));
 
-         navigate('/profile');
+          axios
+          .post('http://localhost:3001/api/v1/user/signup', {
+            email: username,
+            password: password,
+            firstName: '',
+            lastName: '',
+            userName: ''
+          })
+          .then(response => {
+            console.log(response.data);
+            setUserData(response.data);
 
-        } else {
-        }
-      })
-      .catch(error => {
-        setError('Error: User not found!');
-      });
-  };
+
+            dispatch(yourReduxAction(userData));
+          })
+          .catch(error => {
+            setError('Error: User not found!');
+          });
+
+        navigate('/profile');
+      } else {
+       
+      }
+    })
+    .catch(error => {
+      setError('Error: User not found!');
+    });
+};
 
   return (
     <html lang="en">

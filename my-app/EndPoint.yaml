@@ -1,0 +1,158 @@
+Liste des EndPoint nécesseraires au bon fonctionnement de l'application:
+
+-Requête POST Login:
+
+    Cette requete permet de récuperer les informations d'utilisateur dans la base de données,
+    tel que l'email, le password et bien evidement le token de validation.
+
+    Adresse de la requête:
+    'http://localhost:3001/api/v1/user/login' \
+
+    Paramètres de la requête:
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "email": "string",
+    "password": "string"
+    }'
+
+    Réponse HTTP possible:
+
+    200 {
+        "status": 200,
+        "message": "User successfully logged in",
+        "body": {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0OWZmYmQ2MmU2OTgxNDFkYzA4NGFjYSIsImlhdCI6MTY4OTY3NjExMCwiZXhwIjoxNjg5NzYyNTEwfQ.JnbBT22YJ40fbBWYjWphS_A5MoRdcj7K7iulllhuD6g"
+        }
+        }
+
+        Response headers
+        access-control-allow-origin: * 
+        connection: keep-alive 
+        content-length: 245 
+        content-type: application/json; charset=utf-8 
+        date: Tue,18 Jul 2023 10:28:30 GMT 
+        etag: W/"f5-E4evYLilUBwxSPHJy2PSktALLMI" 
+        keep-alive: timeout=5 
+        x-powered-by: Express 
+
+    200	Login Successfully
+            {
+            "token": "string"
+            }
+
+    400	Invalid Fields
+
+    500	Internal Server Error
+
+    
+
+
+
+
+-Requête POST Signup:
+
+    Cette requete permet de récuperer les informations d'utilisateur dans la base de données,
+    que nous n'aviuons pas eu lors de la premiere requête, à savoir le firstname, le lastname et le username.
+
+     Adresse de la requête:
+    'http://localhost:3001/api/v1/user/signup' \
+
+    Paramètres de la requête:
+
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "email": "string",
+    "password": "string",
+    "firstName": "string",
+    "lastName": "string",
+    "userName": "string"
+    }'
+
+    Réponse HTTP possible:
+
+
+    400	 Error: Bad Request
+
+        {
+        "status": 400,
+        "message": "Error: Email already exists"
+        }
+        Response headers
+        access-control-allow-origin: * 
+        connection: keep-alive 
+        content-length: 54 
+        content-type: application/json; charset=utf-8 
+        date: Tue,18 Jul 2023 10:31:07 GMT 
+        etag: W/"36-bHelgPRcT3lZd0F2STeAqSY2qao" 
+        keep-alive: timeout=5 
+        x-powered-by: Express 
+
+200	 Signup Successfully
+    {
+    "status": 0,
+    "message": "string",
+    "body": {
+        "id": "string",
+        "email": "string"
+    }
+    }
+400	Invalid Fields
+
+500	Internal Server Error
+
+
+
+
+
+-Requête PUT Profile:
+
+    Cette requete permet d'ajouter de nouvelle informations, en l'occurence modifier le username,
+    par un nom choisi par l'utilisateur.
+
+    Adresse de la requête:
+      'http://localhost:3001/api/v1/user/profile' \
+
+    Paramètres de la requête:
+
+    -H 'accept: application/json' \
+    -H 'Content-Type: application/json' \
+    -d '{
+    "userName": "string"
+    }'
+
+    Réponse HTTP possible:
+
+    401: {
+        "status": 401,
+        "message": "Token is missing from header"
+        }
+
+        access-control-allow-origin: * 
+        connection: keep-alive 
+        content-length: 55 
+        content-type: application/json; charset=utf-8 
+        date: Tue,18 Jul 2023 10:34:48 GMT 
+        etag: W/"37-+VNRCr6LSkHTDtXAztudAQ4Z9jA" 
+        keep-alive: timeout=5 
+        x-powered-by: Express 
+    
+    200  User profile retrieved successully
+         {
+        "status": 0,
+        "message": "string",
+        "body": {
+            "id": "string",
+            "email": "string"
+        }
+        }
+    
+    400 Invalid Fields
+
+    500 Internal Server Error
+
+
+
+
+

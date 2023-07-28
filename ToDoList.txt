@@ -1,0 +1,10 @@
+patch pour le put
+modélisation des données entrées/sorties 
+utiliser swager editor
+supprimer la delete/post 
+utiliser le wireframe
+
+creer plus de composants
+ajouter le nom dans le header
+checker les maquettes sur le repo originil 
+reduire la taille des images 

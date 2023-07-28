@@ -1,14 +1,17 @@
 import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import Header from './Header';
 import Footer from './Footer';
+import AccountSection from './Account';
 import { Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { updateUsername } from '../authAction';
 
 function UserPage() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const username = useSelector((state) => state.auth.username);
   const [isModalOpen, setModalOpen] = useState(false);
   const [newUserName, setNewUserName] = useState('');
-  const [userName, setUserName] = useState('Tony Jarvis'); // Default username, you can replace it with the actual username from your state or props
+  const dispatch = useDispatch();
 
   const openModal = () => {
     setModalOpen(true);
@@ -17,8 +20,6 @@ function UserPage() {
   const closeModal = () => {
     setModalOpen(false);
   };
-
-
 
   const handleUserNameChange = (event) => {
     setNewUserName(event.target.value);
@@ -32,27 +33,26 @@ function UserPage() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`
+          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ userName: newUserName }),
       });
 
       if (response.ok) {
-        // The update was successful, you can perform necessary actions (e.g., close the modal)
-        setUserName(newUserName); // Update the username with the new value
+        // La mise à jour a réussi, vous pouvez effectuer les actions nécessaires (fermer la modal, etc.)
+        dispatch(updateUsername(newUserName)); // Mettez à jour le nom d'utilisateur dans le store Redux avec la nouvelle valeur
         closeModal();
       } else {
-        console.error('Failed to update user name');
+        console.error('Échec de la mise à jour du nom d\'utilisateur');
       }
     } catch (error) {
-      console.error('Error updating user name', error);
+      console.error('Erreur lors de la mise à jour du nom d\'utilisateur', error);
     }
   };
 
   if (!isAuthenticated) {
     return <Navigate to="/login" />;
   }
-
 
   return (
     <html lang="en">
@@ -68,12 +68,12 @@ function UserPage() {
         
       </head>
       <body>
-      {isModalOpen && (
+        {isModalOpen && (
           <div className="modal">
             <div className="modal-content">
-              <h2>Change User Name</h2>
+              <h2>Changer le nom d'utilisateur</h2>
               <form id='modalform'>
-                <label htmlFor="newUserName">New User Name:</label>
+                <label htmlFor="newUserName">Nouveau nom d'utilisateur :</label>
                 <input
                   type="text"
                   id="newUserName"
@@ -81,54 +81,41 @@ function UserPage() {
                   onChange={handleUserNameChange}
                 />
                 <button className="edit-button" type="button" onClick={updateUserName}>
-                  Save
+                  Sauvegarder
                 </button>
                 <button className="edit-button" type="button" onClick={closeModal}>
-                  Cancel
+                  Annuler
                 </button>
               </form>
             </div>
           </div>
         )}
-      <Header isAuthenticated={isAuthenticated} isUserPage={true} />
+        <Header isAuthenticated={isAuthenticated} isUserPage={true} />
         <main className="main bg-dark">
           <div className="header">
-            <h1>Welcome back<br />{userName}</h1>
+            <h1>Bienvenue de retour<br />{username}</h1>
             <button className="edit-button" onClick={openModal}>
-              Edit Name
+              Modifier le nom
             </button>
           </div>
-          <h2 className="sr-only">Accounts</h2>
-          <section className="account">
-            <div className="account-content-wrapper">
-              <h3 className="account-title">Argent Bank Checking (x8349)</h3>
-              <p className="account-amount">$2,082.79</p>
-              <p className="account-amount-description">Available Balance</p>
-            </div>
-            <div className="account-content-wrapper cta">
-              <button className="transaction-button">View transactions</button>
-            </div>
-          </section>
-          <section className="account">
-            <div className="account-content-wrapper">
-              <h3 className="account-title">Argent Bank Savings (x6712)</h3>
-              <p className="account-amount">$10,928.42</p>
-              <p className="account-amount-description">Available Balance</p>
-            </div>
-            <div className="account-content-wrapper cta">
-              <button className="transaction-button">View transactions</button>
-            </div>
-          </section>
-          <section className="account">
-            <div className="account-content-wrapper">
-              <h3 className="account-title">Argent Bank Credit Card (x8349)</h3>
-              <p className="account-amount">$184.30</p>
-              <p className="account-amount-description">Current Balance</p>
-            </div>
-            <div className="account-content-wrapper cta">
-              <button className="transaction-button">View transactions</button>
-            </div>
-          </section>
+          <h2 className="sr-only">Comptes</h2>
+          <div>
+            <AccountSection
+              title="Argent Bank Checking (x8349)"
+              amount="$2,082.79"
+              description="Solde disponible"
+            />
+            <AccountSection
+              title="Argent Bank Savings (x6712)"
+              amount="$10,928.42"
+              description="Solde disponible"
+            />
+            <AccountSection
+              title="Argent Bank Credit Card (x8349)"
+              amount="$184.30"
+              description="Solde actuel"
+            />
+          </div>
         </main>
         <Footer />
       </body>

@@ -17,4 +17,11 @@ export const yourReduxAction = (userData) => {
     type: 'SIGN-UP',
     payload: userData
   };
+}
+
+export const updateUsername = (newUsername) => {
+  return {
+    type: 'UPDATE_USERNAME',
+    payload: newUsername,
+  };
 };

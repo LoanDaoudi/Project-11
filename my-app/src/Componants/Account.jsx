@@ -1,4 +1,5 @@
 import React from 'react';
+import Button from './Button';
 
 const AccountSection = ({ title, amount, description }) => {
   return (
@@ -9,7 +10,7 @@ const AccountSection = ({ title, amount, description }) => {
         <p className="account-amount-description">{description}</p>
       </div>
       <div className="account-content-wrapper cta">
-        <button className="transaction-button">View transactions</button>
+        <Button />
       </div>
     </section>
   );

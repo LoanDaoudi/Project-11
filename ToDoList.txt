@@ -4,7 +4,7 @@ utiliser swager editor
 supprimer la delete/post 
 utiliser le wireframe
 
-creer plus de composants
-ajouter le nom dans le header
-checker les maquettes sur le repo originil 
-reduire la taille des images 
+
+
+
+a project that includes all the knowledge that I have learned this year and which is the first project where I am a master of artistic direction

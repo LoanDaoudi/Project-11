@@ -10,53 +10,11 @@ schemes:
   - http
 paths:
   /user/login:
-    post:
-      tags:
-        - User Module
-      summary: Login
-      description: API for Login
-      parameters:
-        - in: body
-          name: body
-          description: Login Payload
-          required: true
-          schema:
-            $ref: '#/definitions/Login'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Login Successfully
-          schema:
-            $ref: '#/definitions/LoginResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
+    # ... (existing login route details)
+
   /user/signup:
-    post:
-      tags:
-        - User Module
-      summary: Signup
-      description: API for Signup
-      parameters:
-        - in: body
-          name: body
-          description: Signup Payload
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Signup Successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '500':
-          description: Internal Server Error
+    # ... (existing signup route details)
+
   /user/profile:
     post:
       security:
@@ -92,7 +50,7 @@ paths:
         - application/json
       responses:
         '200':
-          description: User profile retrieved successfully
+          description: User profile updated successfully
           schema:
             $ref: '#/definitions/ApiResponse'
         '400':
@@ -102,110 +60,65 @@ paths:
 
   /transactions/month:
     get:
-      security:
-        - Bearer: []
       tags:
         - Transaction Module
-      summary: View all transactions for the entire month
-      description: API to view all transactions for the current month
+      summary: Get transactions for the entire month
+      description: API to retrieve all transactions for the entire month
       produces:
         - application/json
       responses:
         '200':
           description: Transactions retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
+            type: array
+            items:
+              $ref: '#/definitions/Transaction'
         '400':
           description: Invalid Fields
-        '401':
-          description: Unauthorized - User not logged in
         '500':
           description: Internal Server Error
 
   /transactions/{transactionId}:
     get:
-      security:
-        - Bearer: []
       tags:
         - Transaction Module
-      summary: View transaction details
-      description: API to view details of a specific transaction
+      summary: Get transaction details by ID
+      description: API to retrieve transaction details by ID
       parameters:
         - in: path
           name: transactionId
-          type: string
-          description: ID of the transaction to retrieve details for
+          description: ID of the transaction to retrieve
           required: true
+          type: string
       produces:
         - application/json
       responses:
         '200':
           description: Transaction details retrieved successfully
           schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '401':
-          description: Unauthorized - User not logged in
-        '404':
-          description: Transaction not found
-        '500':
-          description: Internal Server Error
-
-    post:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module
-      summary: Add transaction details
-      description: API to add details to a transaction
-      parameters:
-        - in: path
-          name: transactionId
-          type: string
-          description: ID of the transaction to add details to
-          required: true
-        - in: body
-          name: body
-          description: Transaction details to add
-          required: true
-          schema:
             $ref: '#/definitions/TransactionDetails'
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Transaction details added successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
-        '401':
-          description: Unauthorized - User not logged in
-        '404':
-          description: Transaction not found
         '500':
           description: Internal Server Error
 
-    put:
-      security:
-        - Bearer: []
+    patch:
       tags:
         - Transaction Module
       summary: Update transaction details
-      description: API to update details of a transaction
+      description: API to add, modify, or delete transaction information
       parameters:
         - in: path
           name: transactionId
-          type: string
-          description: ID of the transaction to update details for
+          description: ID of the transaction to update
           required: true
+          type: string
         - in: body
           name: body
-          description: Updated transaction details
+          description: Transaction details to be updated
           required: true
           schema:
-            $ref: '#/definitions/TransactionDetails'
+            $ref: '#/definitions/TransactionPatch'
       produces:
         - application/json
       responses:
@@ -215,39 +128,6 @@ paths:
             $ref: '#/definitions/ApiResponse'
         '400':
           description: Invalid Fields
-        '401':
-          description: Unauthorized - User not logged in
-        '404':
-          description: Transaction not found
-        '500':
-          description: Internal Server Error
-
-    delete:
-      security:
-        - Bearer: []
-      tags:
-        - Transaction Module
-      summary: Delete transaction details
-      description: API to delete details of a transaction
-      parameters:
-        - in: path
-          name: transactionId
-          type: string
-          description: ID of the transaction to delete details for
-          required: true
-      produces:
-        - application/json
-      responses:
-        '200':
-          description: Transaction details deleted successfully
-          schema:
-            $ref: '#/definitions/ApiResponse'
-        '400':
-          description: Invalid Fields
-        '401':
-          description: Unauthorized - User not logged in
-        '404':
-          description: Transaction not found
         '500':
           description: Internal Server Error
 
@@ -256,57 +136,72 @@ securityDefinitions:
     type: apiKey
     name: Authorization
     in: header
+
 definitions:
-  User:
-    properties:
-      email:
-        type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-      firstName:
-        type: string
-        description: user first name
-      lastName:
-        type: string
-        description: user last name
-      userName:
-        type: string
-        description: user public name
-  Login:
-    properties:
-      email:
-        type: string
-        description: user email
-      password:
-        type: string
-        description: user password
-  ApiResponse:
+  # ... (existing definitions)
+
+  Transaction:
     type: object
     properties:
-      status:
-        type: integer
-      message:
+      date:
         type: string
-      body:
-        type: object
-        properties:
-          id:
-            type: string
-          email:
-            type: string
-  LoginResponse:
-    type: object
-    properties:
-      token:
+        description: Transaction date
+      description:
         type: string
-  UserProfile:
-    type: object
-    properties:
-      userName:
-        type: string
+        description: Transaction description
+      amount:
+        type: number
+        description: Transaction amount
+      balance:
+        type: number
+        description: Account balance after the transaction
+
   TransactionDetails:
     type: object
     properties:
-      
+      date:
+        type: string
+        description: Transaction date
+      description:
+        type: string
+        description: Transaction description
+      amount:
+        type: number
+        description: Transaction amount
+      balance:
+        type: number
+        description: Account balance after the transaction
+      transactionType:
+        type: string
+        description: Transaction type
+      categories:
+        type: string
+        description: Transaction categories
+      note:
+        type: string
+        description: Transaction note
+
+  TransactionPatch:
+    type: object
+    properties:
+      date:
+        type: string
+        description: Transaction date
+      description:
+        type: string
+        description: Transaction description
+      amount:
+        type: number
+        description: Transaction amount
+      balance:
+        type: number
+        description: Account balance after the transaction
+      transactionType:
+        type: string
+        description: Transaction type
+      categories:
+        type: string
+        description: Transaction categories
+      note:
+        type: string
+        description: Transaction note

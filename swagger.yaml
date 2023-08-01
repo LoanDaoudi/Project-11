@@ -10,11 +10,54 @@ schemes:
   - http
 paths:
   /user/login:
-    # ... (existing login route details)
+  post:
+      tags:
+        - User Module
+      summary: Login
+      description: API for Login
+      parameters:
+        - in: body
+          name: body
+          description: Login Payload
+          required: true
+          schema:
+            $ref: '#/definitions/Login'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Login Successfully
+          schema:
+            $ref: '#/definitions/LoginResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
 
   /user/signup:
-    # ... (existing signup route details)
-
+post:
+      tags:
+        - User Module
+      summary: Signup
+      description: API for Signup
+      parameters:
+        - in: body
+          name: body
+          description: Signup Payload
+          required: true
+          schema:
+            $ref: '#/definitions/User'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Signup Successfully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
   /user/profile:
     post:
       security:
